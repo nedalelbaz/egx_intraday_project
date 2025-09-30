@@ -1,4 +1,4 @@
-# EGX Intraday Project
+# EGX Intraday Project.
 
 This repository contains the implementation for the EGX intraday data project.
 
