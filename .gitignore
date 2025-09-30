@@ -1,19 +1,7 @@
-# Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Environments
-env/
-venv/
-.venv/
-
-# Environment variables
+*.py[cod]
 .env
-
-# macOS files
+.venv/
+.env.local
+.pytest_cache/
 .DS_Store
-
-# Logs
-*.log

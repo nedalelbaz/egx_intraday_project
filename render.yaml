@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: paper-telegram-webhook
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: starter
+    envVars:
+      - key: PAPER_MODE
+        value: "true"
+      - key: LIVE
+        value: "false"
+      - key: TZ
+        value: "UTC"
+      - key: LOG_LEVEL
+        value: "INFO"
+      - key: WEBHOOK_RPS
+        value: "1.0"
+      - key: WEBHOOK_BURST
+        value: "5"
+      - key: DATA_DIR
+        value: "/var/data"
