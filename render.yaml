@@ -1,0 +1,19 @@
+# render.yaml — Render Blueprint (Docker Web Service)
+services:
+  - type: web
+    name: egx-intraday-assistant
+    env: docker
+    plan: free
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: TZ
+        value: Africa/Cairo
+      - key: PORT
+        value: 8000
+      - key: LOG_LEVEL
+        value: INFO
