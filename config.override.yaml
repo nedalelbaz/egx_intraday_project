@@ -1,0 +1,16 @@
+# config.override.yaml — example overrides for more selective ORB strategy
+strategy:
+  ema_fast: 9
+  ema_slow: 21
+  rsi_len: 14
+  rsi_threshold: 55
+  volume_ma_len: 20
+  surge_factor: 2.0
+  take_profit_rr: 2.0
+  min_confidence_for_alert: 0.70
+  allow_multi_entry: true
+  max_adds: 1
+risk:
+  daily_loss_limit: 0.02  # 2% daily loss limit
+  profit_lock_trigger: 0.02
+  profit_lock_giveback: 0.50
