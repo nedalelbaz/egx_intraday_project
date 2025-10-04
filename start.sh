@@ -12,6 +12,9 @@ export PYTHONPATH=.
 
 # Ensure config.yaml is accessible to the analysis script
 cp -f src/egx_intraday_project/config.yaml config.yaml
+mkdir-p configs
+cp -f src/egx_intraday_project/config.yaml configs/config.yaml
+
 # Start the analysis loop (paper mode)
 python src/egx_intraday_project/egx_intraday_enhanced.py &
 
