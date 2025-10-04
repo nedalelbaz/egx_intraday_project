@@ -1,0 +1,117 @@
+###############################################################
+# EGX Intraday Trading Assistant Configuration
+#
+# This YAML file contains settings for the enhanced EGX intraday
+# trading assistant.  Edit the values below to customise symbols,
+# risk parameters, strategy behaviour, alert settings and more.
+# All monetary values are in Egyptian Pounds (EGP).  Percentages
+# are expressed as decimals (e.g. 0.5 means 0.5% of equity).
+###############################################################
+
+symbols:
+  - "COMI.CA"
+  - "EGTS.CA"
+  - "EFIH.CA"
+  - "ORHD.CA"
+  - "EKHO.CA"
+
+short:
+  allow_short: false    # Set to true to enable shorting (short sell)
+  short_list: []        # List of symbols allowed for short; leave empty to allow all
+
+sectors:
+  COMI.CA: "Banks"
+  EGTS.CA: "Real Estate"
+  EFIH.CA: "Tech"
+  ORHD.CA: "Real Estate"
+  EKHO.CA: "Financials"
+
+market:
+  open_time: "10:00"          # Market open time (HH:MM)
+  close_time: "14:30"         # Market close time (HH:MM)
+  open_range_minutes: 15       # Length of opening range (minutes)
+  late_wake_grace_min: 90      # Grace period after open during which ORB window is computed
+
+data:
+  # Order of data providers to try.  DirectFN (Mubasher) can be used as a
+  # primary provider when credentials are supplied.  It will attempt to
+  # fetch data from providers in the order listed here until one returns
+  # non‑empty data.  Remove or reorder entries as needed.
+  providers_order: ["directfn", "yahoo", "twelvedata", "egxlytics", "investing"]
+  interval: "1m"               # Data granularity: 1m, 5m, etc.
+  lookback_minutes: 240        # Minutes of data to load per run
+  twelvedata_api_key: ""         # Twelve Data API key (optional)
+  rss_feeds: []                # Optional list of RSS feed URLs for news pulse
+  news_max_items: 20           # Maximum news items to fetch per run
+
+  # DirectFN / Mubasher data feed configuration.
+  #
+  # To enable delayed or real‑time intraday data from DirectFN, set
+  # base_url to your DirectFN endpoint and api_key to your key.  If
+  # intraday_path is non‑empty, the provider will use it to fetch
+  # aggregated bars; otherwise it will use the today_traded_path and
+  # resample to the requested interval.  The symbol_format can be
+  # "plain" (e.g. COMI.CA) or "egx_suffix" (e.g. COMI.CA.EGX) depending
+  # on your contract.  Timeout is the request timeout in seconds.
+  directfn:
+    base_url: ""               # e.g. "https://api.directfn-eg.com"
+    api_key: ""                # your API key
+    today_traded_path: "/api/v1/todaytraded"
+    intraday_path: ""
+    symbol_format: "plain"
+    timeout: 15
+
+strategy:
+  momentum:
+    ema_fast: 9
+    ema_slow: 21
+    rsi_len: 14
+    rsi_threshold: 55
+  volume:
+    vol_ma_len: 20
+    surge_factor: 1.8
+  multi_timeframes: ["5min", "15min", "60min"]
+  primary_buffer_atr_mult: 0.15
+  reserve_buffer_atr_mult: 0.10
+  trailing_atr_mult: 0.8
+  take_profit_rr: 2.0
+  allow_multi_entry: true
+  max_adds: 2
+  min_confidence_for_alert: 0.6
+  late_wake_mode: true
+
+risk:
+  daily_start_capital: 100000.0
+  capital_protection_buffer: 0.85
+  daily_loss_limit: 0.03
+  profit_lock_trigger: 0.02
+  profit_lock_giveback: 0.5
+  withdrawal_mode: "fixed"    # Options: fixed, percent, hybrid
+  daily_withdrawal: 1500.0     # Fixed withdrawal amount (EGP) if mode=fixed or hybrid
+  withdrawal_percent: 0.3     # Percent of profit to withdraw if mode=percent or hybrid
+  transaction_cost:
+    commission_rate: 0.0010    # Commission per side (0.10%)
+    stamp_tax_rate: 0.0015     # Stamp tax per side (0.15%)
+  position_sizing:
+    base_risk_per_trade: 0.5   # Percent of equity risked per trade
+    volatility_scale_cap: 1.75 # Upper cap on volatility scaling
+    confidence_scale: true
+  extreme_reserve_fraction: 0.1
+  max_trades_per_day: 10
+
+alerts:
+  telegram_bot_token: ""       # Telegram bot token
+  telegram_chat_id: ""         # Telegram chat ID
+  send_charts: true
+  filter_high_confidence: true
+
+journal:
+  db_path: "egx_intraday.sqlite"
+  report_out_dir: "reports"
+
+watchlist:
+  top_n: 10
+  rank_features:
+    gap_weight: 0.4
+    vol_surge_weight: 0.3
+    momentum_weight: 0.3
