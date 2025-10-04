@@ -99,12 +99,12 @@ async def telegram_webhook(token: str, request: Request) -> JSONResponse:
     if _assistant is not None and payload is not None:
         try:
             handler = getattr(_assistant.tg, "handle_update", None)
-            if callable(handler):
-                handler(payload)
-            # else, ignore unhandled updates
-        except Exception as exc:
+                 if callable(handler):
+                         handler(payload)
+                     # else, ignore unhandled updates
+            except Exception as exc:
             logger.error(f"Error handling Telegram update: {exc}")
-    return JSONResponse(content={})
+r     return JSONResponse(content={})
 
 @app.get("/metrics", summary="Operational metrics")
 async def metrics() -> Dict[str, Any]:
