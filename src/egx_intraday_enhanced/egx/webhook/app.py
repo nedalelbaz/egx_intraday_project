@@ -98,7 +98,10 @@ async def telegram_webhook(token: str, request: Request) -> JSONResponse:
     logger.info("Received Telegram update: %s", payload)
     if _assistant is not None and payload is not None:
         try:
-            _assistant.tg.handle_update(payload)  # type: ignore[attr-defined]
+            _handler = getattr(_assistant.tg, "handle_update", None)
+        if callable(handler):
+            handler(payload)
+        # else, ignore unhandled updates
         except Exception as exc:
             logger.error(f"Error handling Telegram update: {exc}")
     return JSONResponse(content={})
